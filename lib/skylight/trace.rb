@@ -26,6 +26,7 @@ module Skylight
       @instrumenter = instrumenter
       @submitted = false
       @broken = false
+      @traced = false
 
       @notifications = []
 
@@ -130,6 +131,7 @@ module Skylight
     end
 
     def traced
+      @traced = true
       time = gc_time
       now = Util::Clock.nanos
 
@@ -154,7 +156,7 @@ module Skylight
       release
       @submitted = true
 
-      traced
+      traced unless @traced
 
       @instrumenter.process(self)
     rescue Exception => e
